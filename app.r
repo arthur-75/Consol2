@@ -1,4 +1,4 @@
-dataSet=read.csv("Data/Consol2.csv")
+dataSet=read.csv("Data/Consol2.csv",check.names = F)
 dataSet=dataSet[,-c(1,2)]
 library(shiny)
 library(tidyverse)
