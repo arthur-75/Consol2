@@ -1,4 +1,3 @@
-dataSet=read.csv("Data/Consol2.csv")
 ui <- fluidPage(
   headerPanel("Consol 2"),
   sidebarPanel(
