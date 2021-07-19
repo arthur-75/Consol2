@@ -1,4 +1,3 @@
-dataSet=read.csv("Data/Consol2.csv")
 library(shiny)
 library(tidyverse)
 library(scales)
