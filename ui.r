@@ -1,0 +1,126 @@
+
+ui <- fluidPage(
+  headerPanel("Consol 2"),
+  sidebarPanel(
+    tabsetPanel(id = "tabset",
+                tabPanel("Une variable",
+                         selectInput("UnVar", "Variable", names(dataSet), selected = "V001.Sexe"),
+                         textInput("Titre_", label="Titre", placeholder = "ex : Graohique de ..."),
+                         textInput("Xaxis", label="X-axis", placeholder = "ex : Sexe"),
+                         textInput("Yaxis", label="Y-axis", placeholder = "ex : effectifs"),
+                         textInput("TiLege", label="Titre legend", placeholder = "ex : PCS"),
+                         textInput("legendd", label="Legends", placeholder = "ex : Homme, Femmes, autre "),
+                ),
+                tabPanel("Deux Variables",
+                         pickerInput("slsp", "Choisir", choices = c("Table croisée","Margin - Mosaicplot"), selected =NULL, options = list('actions-box' = TRUE), multiple = F),
+                         selectInput("row", "Variable en line", names(dataSet), selected = "V001.Sexe"),
+                         actionButton("toInverse","Inverser"),
+                         selectInput("column", "Variable rn column", names(dataSet), selected = "V006.Pcs"),
+                         textInput("Titre_1", label="Titre", placeholder = "ex : effectifs"),
+                         textInput("Xaxis1", label="X-axis", placeholder = "ex : effectifs"),
+                         textInput("Yaxis1", label="Y-axis", placeholder = "ex : effectifs"),
+                         textInput("TiLege1", label="Titre legend", placeholder = "ex : effectifs"),
+                         textInput("legendd1", label="Legends", placeholder = "ex : Homme, Femmes, "),
+                ),
+                tabPanel("Trois Variables",
+                         pickerInput("var3Prem", "Variable 1 en tete  :", choices = c(names(dataSet)), selected ="V001.Sexe", options = list('actions-box' = TRUE), multiple = F),
+                         pickerInput("var3Sec", "Variable 2 integré (Y-axis):", choices = c(names(dataSet)), selected ="V006.Pcs", options = list('actions-box' = TRUE), multiple = F),
+                         pickerInput("var3Troi", "Variable 3 coté gauche (X-axis)", choices = c(names(dataSet)), selected ="V004.StatutMatrimonial", options = list('actions-box' = TRUE), multiple = F),
+                         textInput("Titre_", label="Titre", placeholder = "ex : effectifs"),
+                         textInput("Xaxis", label="X-axis", placeholder = "ex : effectifs"),
+                         textInput("Yaxis", label="Y-axis", placeholder = "ex : effectifs"),
+                         textInput("TiLege", label="Titre legend", placeholder = "ex : effectifs"),
+                         textInput("legendd", label="Legends", placeholder = "ex : Homme, Femmes, "),
+                ),
+                tabPanel("Ensemble des tables",
+                         pickerInput("by_", "Choisir la variable :", choices = c(names(dataSet)), selected ="", options = list('actions-box' = TRUE), multiple = F),
+                         pickerInput("varTables", "Par rapport aux : ", choices = c(names(dataSet)), selected =c("V001.Sexe","V006.Pcs"), options = list('actions-box' = TRUE), multiple = T),
+                         pickerInput("percent_", "Pourcentage", choices = c("row","col"), selected ="row", options = list('actions-box' = TRUE), multiple = F),
+                         pickerInput("only_", "Sortis", choices = c("Les deux","Numbres","Poucentage"), selected ="Les deux", options = list('actions-box' = TRUE), multiple = F),
+                         actionButton("butUpdate","Update"),
+                         checkboxInput("pasgraphe","Graphes ? " , F),
+                         textInput("Titre_", label="Titre", placeholder = "ex : effectifs"),
+                         textInput("TiLege", label="Titre legend", placeholder = "ex : effectifs"),
+                         textInput("legendd", label="Legends", placeholder = "ex : Homme, Femmes, "),
+                ),
+                tabPanel("Box plot et Pyramide",
+                         pickerInput("box1", "Variable 1 Quanti", choices = c(names(dataSet)), selected ="V002.Age", options = list('actions-box' = TRUE), multiple = F),
+                         pickerInput("box2", "Variable 2 Quali(plusieurs modelités)", choices = c(names(dataSet)), selected ="V006.Pcs", options = list('actions-box' = TRUE), multiple = F),
+                         pickerInput("box3", "Variable 3 Quali (2 modalités pour la Pyramide)", choices = c(names(dataSet)), selected ="V001.Sexe", options = list('actions-box' = TRUE), multiple = F),
+                         
+                         textInput("Titre_5", label="Titre", placeholder = "ex : effectifs"),
+                         textInput("Xaxis5", label="X-axis", placeholder = "ex : effectifs"),
+                         textInput("Yaxis5", label="Y-axis", placeholder = "ex : effectifs"),
+                         textInput("TiLege5", label="Titre legend", placeholder = "ex : effectifs"),
+                         textInput("legendd5", label="Legends", placeholder = "ex : Homme, Femmes, "),
+                )
+    ),checkboxInput("pasNa","Pas de NA" , F),
+    
+    sliderInput("Tit1", label="Taille de Titre", min = 5,max=40 ,value = 25),
+    sliderInput("Tit2", label="Taille de X-axis",  min = 5,max=40,value = 15),
+    sliderInput("Tit3", label="Taille de Y-axis", min = 5,max=40,value = 15),
+    sliderInput("Tit4", label="Taille de Titre de legend",  min = 5,max=40,value = 16),
+    sliderInput("Tit5", label="Taille des legends", min = 5,max=40,value = 15),
+  ),
+  #main page 
+  mainPanel(
+    
+    conditionalPanel(
+      condition = "input.tabset  == 'Une variable' ",
+      h2("Effectifs"),
+      h4(textOutput("selected_var1")),
+      tableOutput('tableVar1'),
+      plotOutput("plot2var1"),
+      plotOutput("plot2var2"),
+    ),
+    conditionalPanel(
+      condition = "input.tabset  == 'Deux Variables' ",
+      conditionalPanel(
+        condition = "input.slsp == 'Table croisée'   ",
+        h3('Cross table'),
+        tableOutput('effectif12'),
+        checkboxInput("AffichText","Afficher le text" , T),
+        plotOutput('plot2effecti'),
+        plotOutput("plotplus2"),
+        textOutput("SummaryPva"),
+      ),
+      conditionalPanel(
+        condition = " input.slsp  == 'Margin - Mosaicplot'",
+        h4("Pourcentage en ligne en %"),
+        tableOutput('tableMarginRow'),
+        h4("Pourcentage en col en %"),
+        tableOutput('tableMarginCol'),
+        plotOutput("plot2MarginRow"),
+        plotOutput("plot2pour"),
+        
+      ),
+    ),
+    
+    conditionalPanel(
+      
+      condition ="input.tabset  == 'Ensemble des tables' ",
+      h3('Tables croisées'),
+      gt_output('tables33'),
+      plotOutput("plot2pour22"),
+      
+    ),
+    conditionalPanel(
+      condition ="input.tabset  == 'Trois Variables' ",
+      h3('Trois tables croisées'),
+      checkboxInput("show_tabl","Voir la table",F),
+      tableOutput('Table3var'),
+      plotOutput('plot3var2'),
+      plotOutput("plot3var"),
+      plotOutput('plot3varMozi'),
+      
+    ),
+    conditionalPanel(
+      condition ="input.tabset  == 'Box plot et Pyramide' ",
+      h3('Box plot et  Pyramide'),
+      radioButtons("boxvilon","choisissez la representation :",
+                   choices = list("Violin"="vio","BoxPlot"="box"),selected = "vio"),
+      plotOutput("boxPlot"),
+      plotOutput('Pyramide'),
+    )
+  )
+)
