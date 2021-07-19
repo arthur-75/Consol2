@@ -1,4 +1,5 @@
 dataSet=read.csv("Data/Consol2.csv")
+dataSet=dataSet[,-c(1,2)]
 library(shiny)
 library(tidyverse)
 library(scales)
