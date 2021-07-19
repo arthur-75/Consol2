@@ -1,2 +1,4 @@
 *.csv filter=lfs diff=lfs merge=lfs -text
 /Data*.csv filter=lfs diff=lfs merge=lfs -text
+*csv filter=lfs diff=lfs merge=lfs -text
+Consol2.csv filter=lfs diff=lfs merge=lfs -text
