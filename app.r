@@ -16,8 +16,7 @@ library(viridis)
 library(glue)
 theme_gtsummary_language("fr",decimal.mark = ",",big.mark = "")
 #a=dataSet
-dataSet[dataSet==" "]=NA
-dataSet[dataSet=="NA"]=NA
+
 shinyApp(ui = ui, server = server)
 
 
