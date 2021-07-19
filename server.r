@@ -1,4 +1,3 @@
-dataSet=read.csv("Data/Consol2.csv")
 server <- function(input, output,session) {
   #Data pour NA
   dataNa<- reactive({
